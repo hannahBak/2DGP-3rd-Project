@@ -101,40 +101,50 @@ def handle_events():
 
 bath = None
 boy = None
-enemy = None
-item = None
+enemys = []
+items = []
 running = True
 dir = 0
 h = 420
 f = 120
 
 def enter():
-    global bath, boy, enemy, item, running
+    global bath, boy, running
     boy = Boy()
     bath = Bath()
-    enemy = Enemy()
-    item = Item()
+    enemys.append(Enemy())
+    enemys.append(Enemy())
+    items.append(Item())
+    items.append(Item())
 
 
 def exit():
-    global bath, boy, enemy, item
+    global bath, boy
+    for item in items:
+        del item
+    for enemy in enemys:
+        del enemy
     del bath
     del boy
-    del enemy
-    del item
+
+
 
 def update():
     boy.update()
-    enemy.update()
-    item.update()
+    for enemy in enemys:
+        enemy.update()
+    for item in items:
+        item.update()
     pass
 
 def draw():
     clear_canvas()
     bath.draw()
     boy.draw()
-    enemy.draw()
-    item.draw()
+    for enemy in enemys:
+        enemy.draw()
+    for item in items:
+        item.draw()
     update_canvas()
 
 def pause():
