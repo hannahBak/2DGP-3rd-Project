@@ -1,162 +1,73 @@
-from pico2d import*
-import random
+from pico2d import *
+import game_framework
+import game_world
 
-class Bath:
-    def __init__(self):
-        self.bath = load_image('bath.png')
+from boy import Boy
+from enemy import Enemy
 
-    def draw(self):
-        self.bath.draw(360, 270)
-
-class Boy:
-    def __init__(self):
-        self.x, self.y = 360, 90
-        self.frame = 0
-        self.character = load_image('boyCharacter.png')
-        self.h = None
-        self.y = 90
-        self.f = 120
-
-    def update(self):
-        self.frame = (self.frame + 1) % 6
-        self.x += dir * 25
-        self.h = h
-        self.f = f
-        if self.x > 720:
-            self.x -= dir * 25
-        elif self.x < 0:
-            self.x = 0
-
-    def draw(self):
-        self.character.clip_draw(self.frame*self.f, self.h, 120, 160, self.x, self.y)
-        delay(0.1)
-
-class Enemy:
-    def __init__(self):
-        self.y = 540
-        self.x = random.randint(0, 720)
-        self.enemy = load_image('smile_poop.png')
-        self.speed = 20
-
-    def update(self):
-        self.y -= self.speed
-        if self.y < 0:
-            self.y = 540
-            self.x = random.randint(0, 720)
-            self.speed += 5
-
-    def draw(self):
-        self.enemy.draw(self.x, self.y)
-
-class Item:
-    def __init__(self):
-        self.y = 540
-        self.x = random.randint(0, 720)
-        self.coin = load_image('coin.png')
-        self.bomb = load_image('Bomb.png')
-        self.speed = 30
-
-    def update(self):
-        self.y -= self.speed
-        if self.y < 0:
-            self.y = 540
-            self.x = random.randint(0, 720)
-            self.speed += 3
-
-    def draw(self):
-        self.coin.draw(self.x, self.y)
+boy = None
+enemy = None
 
 def handle_events():
-    global running
-    global dir
-    global h, f
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
-            running = False
-        elif event.type == SDL_KEYDOWN:
-            if event.key == SDLK_RIGHT:
-                dir += 1
-                Boy.y = 90
-                h = 420
-                f = 120
-            elif event.key == SDLK_LEFT:
-                h = 580
-                dir -= 1
-                Boy.y = 90
-                f = 120
-            elif event.key == SDLK_SPACE:
-                if h == 580:
-                    h = 60
-                elif h == 420:
-                    h = 250
-                f = 130
-            elif event.key == SDLK_ESCAPE:
-                running = False
-        elif event.type == SDL_KEYUP:
-            if event.key == SDLK_RIGHT:
-                dir -= 1
-            elif event.key == SDLK_LEFT:
-                dir += 1
+            game_framework.quit()
+        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
+            game_framework.quit()
+        else:
+            boy.handle_event(event)
 
-bath = None
-boy = None
-enemys = []
-items = []
-running = True
-dir = 0
-h = 420
-f = 120
 
+# 초기화
 def enter():
-    global bath, boy, running
+    global boy, enemy
     boy = Boy()
-    bath = Bath()
-    enemys.append(Enemy())
-    enemys.append(Enemy())
-    items.append(Item())
-    items.append(Item())
+    enemy = Enemy()
 
 
+
+# 종료
 def exit():
-    global bath, boy
-    for item in items:
-        del item
-    for enemy in enemys:
-        del enemy
-    del bath
+    global boy, enemy
     del boy
-
-
+    del enemy
 
 def update():
-    boy.update()
-    for enemy in enemys:
-        enemy.update()
-    for item in items:
-        item.update()
-    pass
+    for game_object in game_world.all_objects():
+        game_object.update()
+
+    # boy.update()
+
+
+def draw_world():
+    for game_object in game_world.all_objects():
+        game_object.draw()
+
+    #grass.draw()
+    #boy.draw()
+    #if ball == None:
+    #    ball.draw()
 
 def draw():
     clear_canvas()
-    bath.draw()
-    boy.draw()
-    for enemy in enemys:
-        enemy.draw()
-    for item in items:
-        item.draw()
+    draw_world()
     update_canvas()
 
 def pause():
     pass
+
 def resume():
     pass
 
-open_canvas(720, 540)
-enter()
-while running:
-    handle_events()
-    update()
-    draw()
-exit()
-close_canvas()
+
+
+def test_self():
+    import play_state
+
+    pico2d.open_canvas()
+    game_framework.run(play_state)
+    pico2d.clear_canvas()
+
+if __name__ == '__main__':
+    test_self()
