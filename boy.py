@@ -1,7 +1,5 @@
 from pico2d import *
 
-
-
 #1 : 이벤트 정의
 RD, LD, RU, LU = range(4)
 event_name = ['RD', 'LD', 'RU', 'LU']
@@ -34,9 +32,9 @@ class IDLE:
     @staticmethod
     def draw(self):
         if self.face_dir == 1:
-            self.image.clip_draw(self.frame * 100, 300, 100, 100, self.x, self.y)
+            self.character.clip_draw(self.frame * 120, 420, 120, 160, self.x, self.y)
         else:
-            self.image.clip_draw(self.frame * 100, 200, 100, 100, self.x, self.y)
+            self.character.clip_draw(self.frame * 120, 580, 120, 160, self.x, self.y)
 
 
 class RUN:
@@ -58,8 +56,12 @@ class RUN:
 
     def do(self):
         self.frame = (self.frame + 1) % 6
-        self.x += self.dir
-        self.x = clamp(0, self.x, 800)
+        self.x += self.dir * 25
+
+        if self.x > 720:
+            self.x -= self.dir * 25
+        elif self.x < 0:
+            self.x = 0
 
 
     def draw(self):
@@ -82,19 +84,19 @@ next_state = {
 class Boy:
 
     def __init__(self):
-        self.x, self.y = 800 // 2, 50
+        self.x, self.y = 360, 90
         self.frame = 0
         self.dir, self.face_dir = 0, 1
         self.character = load_image('boyCharacter.png')
-
-        self.timer = 100
 
         self.event_que = []
         self.cur_state = IDLE
         self.cur_state.enter(self, None)
 
 
+
     def update(self):
+
         self.cur_state.do(self)
 
         if self.event_que:
@@ -106,7 +108,11 @@ class Boy:
                 print('ERROR:', self.cur_state.__name__, '  ',  event_name[event])
             self.cur_state.enter(self, event)
 
+
+
+
     def draw(self):
+
         self.cur_state.draw(self)
         debug_print('PPPP')
         debug_print(f'Face Dir: {self.face_dir}, Dir: {self.dir}')

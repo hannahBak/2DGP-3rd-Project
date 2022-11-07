@@ -5,7 +5,8 @@ class Enemy:
     image = None
 
     def __init__(self):
-        Enemy.image = load_image('smile_poop.png')
+        if Enemy.image == None:
+            Enemy.image = load_image('smile_poop.png')
         self.y = 540
         self.x = random.randint(0, 720)
         self.speed = 20

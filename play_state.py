@@ -4,9 +4,11 @@ import game_world
 
 from boy import Boy
 from enemy import Enemy
+from bath import Bath
 
 boy = None
 enemy = None
+bath = None
 
 def handle_events():
     events = get_events()
@@ -21,7 +23,9 @@ def handle_events():
 
 # 초기화
 def enter():
-    global boy, enemy
+    global boy, enemy, bath
+
+    bath = Bath()
     boy = Boy()
     enemy = Enemy()
 
@@ -29,25 +33,25 @@ def enter():
 
 # 종료
 def exit():
-    global boy, enemy
+    global boy, enemy, bath
+    del bath
     del boy
     del enemy
 
 def update():
-    for game_object in game_world.all_objects():
-        game_object.update()
 
-    # boy.update()
+    boy.update()
+
+    enemy.update()
 
 
 def draw_world():
-    for game_object in game_world.all_objects():
-        game_object.draw()
+    delay(0.05)
 
-    #grass.draw()
-    #boy.draw()
-    #if ball == None:
-    #    ball.draw()
+    bath.draw()
+    boy.draw()
+    enemy.draw()
+
 
 def draw():
     clear_canvas()
@@ -58,13 +62,12 @@ def pause():
     pass
 
 def resume():
-    pass
 
+    pass
 
 
 def test_self():
     import play_state
-
     pico2d.open_canvas()
     game_framework.run(play_state)
     pico2d.clear_canvas()
