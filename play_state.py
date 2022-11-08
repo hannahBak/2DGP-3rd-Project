@@ -1,14 +1,16 @@
 from pico2d import *
 import game_framework
 import game_world
+import threading
+import time
 
 from boy import Boy
 from enemy import Enemy
 from bath import Bath
 
 boy = None
-enemy = None
 bath = None
+enemys = []
 
 def handle_events():
     events = get_events()
@@ -23,34 +25,35 @@ def handle_events():
 
 # 초기화
 def enter():
-    global boy, enemy, bath
+    global boy, bath
 
     bath = Bath()
     boy = Boy()
-    enemy = Enemy()
-
+    enemys.append(Enemy())
 
 
 # 종료
 def exit():
-    global boy, enemy, bath
+    global boy, bath
     del bath
     del boy
-    del enemy
+    for enemy in enemys:
+        del enemy
 
 def update():
-
+    threading.Timer(3, enemys.append(Enemy())).start()
     boy.update()
-
-    enemy.update()
+    for enemy in enemys:
+        enemy.update()
 
 
 def draw_world():
     delay(0.05)
-
     bath.draw()
     boy.draw()
-    enemy.draw()
+    for enemy in enemys:
+        enemy.draw()
+
 
 
 def draw():
