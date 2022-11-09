@@ -6,11 +6,13 @@ import time
 
 from boy import Boy
 from enemy import Enemy
+from enemy import Angry_enemy
 from bath import Bath
 
 boy = None
 bath = None
 enemys = []
+angrys = []
 
 def handle_events():
     events = get_events()
@@ -29,7 +31,9 @@ def enter():
     bath = Bath()
     boy = Boy()
     enemys.append(Enemy())
-    threading.Timer(3, add_enemy).start()
+    threading.Timer(5, add_enemy).start()
+    threading.Timer(5, add_Angry).start()
+
 
 
 # 종료
@@ -37,15 +41,19 @@ def exit():
     global boy, bath
     del bath
     del boy
+
     for enemy in enemys:
         del enemy
+    for angry in angrys:
+        del angry
 
 def update():
 
     boy.update()
     for enemy in enemys:
         enemy.update()
-
+    for angry in angrys:
+        angry.update()
 
 def draw_world():
     delay(0.05)
@@ -53,6 +61,8 @@ def draw_world():
     boy.draw()
     for enemy in enemys:
         enemy.draw()
+    for angry in angrys:
+        angry.draw()
 
 
 
@@ -70,6 +80,10 @@ def resume():
 
 def add_enemy():
     enemys.append(Enemy())
+
+def add_Angry():
+    angrys.append(Angry_enemy())
+
 
 
 def test_self():
