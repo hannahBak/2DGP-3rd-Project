@@ -26,10 +26,10 @@ def handle_events():
 # 초기화
 def enter():
     global boy, bath
-
     bath = Bath()
     boy = Boy()
     enemys.append(Enemy())
+    threading.Timer(3, add_enemy).start()
 
 
 # 종료
@@ -41,7 +41,7 @@ def exit():
         del enemy
 
 def update():
-    threading.Timer(3, enemys.append(Enemy())).start()
+
     boy.update()
     for enemy in enemys:
         enemy.update()
@@ -67,6 +67,9 @@ def pause():
 def resume():
 
     pass
+
+def add_enemy():
+    enemys.append(Enemy())
 
 
 def test_self():
