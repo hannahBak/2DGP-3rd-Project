@@ -33,19 +33,16 @@ def enter():
     enemys.append(Enemy())
     threading.Timer(5, add_enemy).start()
     threading.Timer(5, add_Angry).start()
+    game_world.add_object(bath, 0)
+    game_world.add_object(boy, 1)
+    game_world.add_object(enemys, 1)
+    game_world.add_object(angrys, 1)
 
 
 
 # 종료
 def exit():
-    global boy, bath
-    del bath
-    del boy
-
-    for enemy in enemys:
-        del enemy
-    for angry in angrys:
-        del angry
+    game_world.clear()
 
 def update():
 
@@ -56,7 +53,7 @@ def update():
         angry.update()
 
 def draw_world():
-    delay(0.05)
+
     bath.draw()
     boy.draw()
     for enemy in enemys:

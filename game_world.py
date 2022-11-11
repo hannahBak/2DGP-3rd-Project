@@ -1,6 +1,6 @@
 # game world
 
-objects = [[], [], []]
+objects = [[], []]
 
 def add_object(o, depth):
     objects[depth].append(o)

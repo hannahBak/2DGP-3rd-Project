@@ -1,4 +1,5 @@
 from pico2d import *
+import game_framework
 
 #1 : 이벤트 정의
 RD, LD, RU, LU = range(4)
@@ -26,15 +27,15 @@ class IDLE:
 
     @staticmethod
     def do(self):
-        self.frame = (self.frame + 1) % 6
+        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 6
 
 
     @staticmethod
     def draw(self):
         if self.face_dir == 1:
-            self.character.clip_draw(self.frame * 120, 420, 120, 160, self.x, self.y)
+            self.character.clip_draw(int(self.frame) * 120, 420, 120, 160, self.x, self.y)
         else:
-            self.character.clip_draw(self.frame * 120, 580, 120, 160, self.x, self.y)
+            self.character.clip_draw(int(self.frame) * 120, 580, 120, 160, self.x, self.y)
 
 
 class RUN:
@@ -55,8 +56,8 @@ class RUN:
 
 
     def do(self):
-        self.frame = (self.frame + 1) % 6
-        self.x += self.dir * 25
+        self.frame = (self.frame + FRAMES_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 6
+        self.x += self.dir * RUN_SPEED_PPS * game_framework.frame_time
 
         if self.x > 720:
             self.x -= self.dir * 25
@@ -66,9 +67,9 @@ class RUN:
 
     def draw(self):
         if self.dir == -1:
-            self.character.clip_draw(self.frame * 120, 580, 120, 160, self.x, self.y)
+            self.character.clip_draw(int(self.frame) * 120, 580, 120, 160, self.x, self.y)
         elif self.dir == 1:
-            self.character.clip_draw(self.frame * 120, 420, 120, 160, self.x, self.y)
+            self.character.clip_draw(int(self.frame) * 120, 420, 120, 160, self.x, self.y)
 
 
 #3. 상태 변환 구현
@@ -78,7 +79,15 @@ next_state = {
     RUN:   {RU: IDLE, LU: IDLE, RD: IDLE, LD: IDLE}
 }
 
+PIXEL_PER_METER = (10.0 / 0.3)
+RUN_SPEED_KPH = 20.0  # 마라토너의 평속
+RUN_SPEED_MPM = (RUN_SPEED_KPH * 1000.0 / 60.0)
+RUN_SPEED_MPS = (RUN_SPEED_MPM / 60.0)
+RUN_SPEED_PPS = (RUN_SPEED_MPS * PIXEL_PER_METER)
 
+TIME_PER_ACTION = 0.5
+ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
+FRAMES_PER_ACTION = 6
 
 
 class Boy:
