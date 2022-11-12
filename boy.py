@@ -125,6 +125,7 @@ class Boy:
         self.cur_state.draw(self)
         debug_print('PPPP')
         debug_print(f'Face Dir: {self.face_dir}, Dir: {self.dir}')
+        draw_rectangle(*self.get_bb())
 
     def add_event(self, event):
         self.event_que.insert(0, event)
@@ -134,5 +135,9 @@ class Boy:
             key_event = key_event_table[(event.type, event.key)]
             self.add_event(key_event)
 
+    def get_bb(self):
+        return self.x - 40, self.y - 70, self.x + 40, self.y + 60
 
-
+    def handle_collision(self, other, group):
+        print('boy meets enemy')
+        pass
