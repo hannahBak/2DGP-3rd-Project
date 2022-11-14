@@ -42,4 +42,4 @@ class Coin:
 
     def handle_collision(self, other, group):
         if group == 'boy:coin':
-            self.score += 1
+            print('coin meets boy')

@@ -49,14 +49,16 @@ def enter():
 
 
     global enemys
+    enemys = [Enemy() for i in range(1)] + [Angry_enemy() for i in range(0)]
     enemys.append(Enemy())
     threading.Timer(5, add_enemy).start()
     threading.Timer(10, add_Angry).start()
-    enemys = [Enemy() for i in range(1)] + [Angry_enemy() for i in range(0)]
     game_world.add_objects(enemys, 1)
 
 
+    game_world.add_collision_group(boy, enemys, 'boy:enemy')
     game_world.add_collision_group(boy, coin, 'boy:coin')
+
 
 
 # 종료
@@ -70,16 +72,16 @@ def update():
     for enemy in enemys:
         enemy.update()
 
-    for life in lifes.copy():
-        if collide(boy, enemy):
-            lifes.remove(life)
-            game_world.remove_object(life)
+    for life in lifes:
+        life.update()
+
 
     for a, b, group in game_world.all_collision_pairs():
         if collide(a, b):
             print('COLLISION ', group)
             a.handle_collision(b, group)
             b.handle_collision(a, group)
+            
 
 
 def draw_world():

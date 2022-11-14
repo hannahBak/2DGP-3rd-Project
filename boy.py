@@ -139,5 +139,6 @@ class Boy:
         return self.x - 40, self.y - 70, self.x + 40, self.y + 60
 
     def handle_collision(self, other, group):
-        print('boy meets enemy')
         pass
+
+

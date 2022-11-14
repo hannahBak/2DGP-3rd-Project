@@ -52,3 +52,4 @@ def remove_collision_object(o):
     for pairs in collision_group.values(): # key:value 에서 value에 해당되는 것만 가져온다.
         if o in pairs[0]: pairs[0].remove(o)
         elif o in pairs[1]: pairs[1].remove(o)
+
