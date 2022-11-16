@@ -22,10 +22,13 @@ class Life:
     def draw(self):
         self.image.draw(self.x, self.y)
 
-
     def update(self):
         pass
 
-
+    def remove(self):
+        game_world.remove_object(self)
+    def handle_collision(boy, enemy, group):
+        if group == 'boy:enemy':
+            Life.remove()
 
 

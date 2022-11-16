@@ -3,6 +3,8 @@ import random
 import game_framework
 import game_world
 
+from ui import Life
+
 PIXEL_PER_METER = (10.0 / 0.3)
 RUN_SPEED_KPH = 40.0  # 마라토너의 평속
 RUN_SPEED_MPM = (RUN_SPEED_KPH * 1000.0 / 60.0)
@@ -36,12 +38,16 @@ class Enemy:
     def get_bb(self):
         return self.x - 30, self.y - 30, self.x + 30, self.y + 30
 
-class Angry_enemy:
+    def handle_collision(self, boy, group):
+        if group == 'boy:enemy':
+            print('collide enemy')
+
+class Angry:
     image = None
 
     def __init__(self):
-        if Angry_enemy.image == None:
-            Angry_enemy.image = load_image('angry_poop.png')
+        if Angry.image == None:
+            Angry.image = load_image('angry_poop.png')
         self.y = 540
         self.x = random.randint(0, 720)
         self.dir = 1
@@ -61,4 +67,4 @@ class Angry_enemy:
 
     def handle_collision(self, other, group):
         if group == 'boy:enemy':
-            game_world.remove_object(self)
+            print('collide angry')

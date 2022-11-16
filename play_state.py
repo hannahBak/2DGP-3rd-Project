@@ -6,7 +6,7 @@ import time
 
 from boy import Boy
 from enemy import Enemy
-from enemy import Angry_enemy
+from enemy import Angry
 from bath import Bath
 from ui import Life
 from coin import Coin
@@ -16,7 +16,7 @@ bath = None
 coin = None
 lifes = []
 enemys = []
-score = None
+angrys = []
 
 
 def handle_events():
@@ -32,7 +32,7 @@ def handle_events():
 
 # 초기화
 def enter():
-    global boy, bath, coin
+    global boy, bath, coin, angrys
     bath = Bath()
     game_world.add_object(bath, 0)
 
@@ -42,6 +42,10 @@ def enter():
     coin = Coin()
     game_world.add_object(coin, 1)
 
+    angrys = [Angry() for i in range(0)]
+    threading.Timer(10, angrys.append(Angry())).start()
+    game_world.add_objects(angrys, 1)
+
 
     global lifes
     lifes = [Life() for i in range(3)]
@@ -49,16 +53,13 @@ def enter():
 
 
     global enemys
-    enemys = [Enemy() for i in range(1)] + [Angry_enemy() for i in range(0)]
-    enemys.append(Enemy())
-    threading.Timer(5, add_enemy).start()
-    threading.Timer(10, add_Angry).start()
+    enemys = [Enemy() for i in range(1)]
+    threading.Timer(5, enemys.append(Enemy())).start()
     game_world.add_objects(enemys, 1)
-
 
     game_world.add_collision_group(boy, enemys, 'boy:enemy')
     game_world.add_collision_group(boy, coin, 'boy:coin')
-
+    game_world.add_collision_group(boy, coin, 'boy:angry')
 
 
 # 종료
@@ -68,13 +69,6 @@ def exit():
 def update():
     for game_object in game_world.all_objects():
         game_object.update()
-
-    for enemy in enemys:
-        enemy.update()
-
-    for life in lifes:
-        life.update()
-
 
     for a, b, group in game_world.all_collision_pairs():
         if collide(a, b):
@@ -88,13 +82,6 @@ def draw_world():
     for game_object in game_world.all_objects():
         game_object.draw()
 
-    for enemy in enemys:
-        enemy.draw()
-
-    for life in lifes:
-        life.draw()
-
-
 def draw():
     clear_canvas()
     draw_world()
@@ -106,12 +93,6 @@ def pause():
 def resume():
 
     pass
-
-def add_enemy():
-    enemys.append(Enemy())
-
-def add_Angry():
-    enemys.append(Angry_enemy())
 
 def collide(a, b):
     la, ba, ra, ta = a.get_bb()

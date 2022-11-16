@@ -103,7 +103,6 @@ class Boy:
         self.cur_state.enter(self, None)
 
 
-
     def update(self):
 
         self.cur_state.do(self)
@@ -116,9 +115,7 @@ class Boy:
             except KeyError:
                 print('ERROR:', self.cur_state.__name__, '  ',  event_name[event])
             self.cur_state.enter(self, event)
-
-
-
+        self.character = load_image('boyCharacter.png')
 
     def draw(self):
 
@@ -138,7 +135,9 @@ class Boy:
     def get_bb(self):
         return self.x - 40, self.y - 70, self.x + 40, self.y + 60
 
-    def handle_collision(self, other, group):
-        pass
+
+    def handle_collision(self, enemy, group):
+        self.character = load_image('redCharacter.png')
+
 
 
