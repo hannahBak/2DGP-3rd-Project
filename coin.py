@@ -37,9 +37,13 @@ class Coin:
             self.y = 540
             self.x = random.randint(0, 720)
 
+
     def get_bb(self):
         return self.x - 30, self.y - 30, self.x + 30, self.y + 30
 
+
+
     def handle_collision(self, other, group):
         if group == 'boy:coin':
-                self.score += 1
+            self.score += 1
+

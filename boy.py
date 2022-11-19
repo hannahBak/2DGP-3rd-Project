@@ -136,8 +136,12 @@ class Boy:
         return self.x - 40, self.y - 70, self.x + 40, self.y + 60
 
 
-    def handle_collision(self, enemy, group):
-        self.character = load_image('redCharacter.png')
+    def handle_collision(self, other, group):
+        if group == 'boy:enemy':
+            self.character = load_image('redCharacter.png')
+        if group == 'boy:coin':
+            self.character = load_image('blueCharacter.png')
+
 
 
 

@@ -42,19 +42,13 @@ def enter():
     coin = Coin()
     game_world.add_object(coin, 1)
 
-    angrys = [Angry() for i in range(0)]
-    threading.Timer(10, angrys.append(Angry())).start()
-    game_world.add_objects(angrys, 1)
-
-
     global lifes
     lifes = [Life() for i in range(3)]
     game_world.add_objects(lifes, 1)
 
 
     global enemys
-    enemys = [Enemy() for i in range(1)]
-    threading.Timer(5, enemys.append(Enemy())).start()
+    enemys = [Enemy() for i in range(2)] + [Angry() for i in range(1)]
     game_world.add_objects(enemys, 1)
 
     game_world.add_collision_group(boy, enemys, 'boy:enemy')
@@ -69,6 +63,13 @@ def exit():
 def update():
     for game_object in game_world.all_objects():
         game_object.update()
+
+    for enemy in enemys.copy():
+        for life in lifes.copy():
+            if collide(boy, enemy):
+                lifes.remove(life)
+                game_world.remove_object(life)
+
 
     for a, b, group in game_world.all_collision_pairs():
         if collide(a, b):
