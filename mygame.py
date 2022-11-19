@@ -1,8 +1,8 @@
 import game_framework
 import pico2d
 
-import play_state
+import title
 
 pico2d.open_canvas(720, 540)
-game_framework.run(play_state)
+game_framework.run(title)
 pico2d.close_canvas()
