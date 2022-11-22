@@ -2,22 +2,14 @@ from pico2d import *
 import random
 import game_world
 import game_framework
-list = []
 
-from coin import Coin
-
-class Life:
+class Life1:
     image = None
     def __init__(self):
-        if Life.image == None:
-            Life.image = load_image('heart.png')
+        if Life1.image == None:
+            Life1.image = load_image('heart.png')
         self.y = 480
-        global list
-        self.x = random.choice([20, 50, 80])
-        while self.x in list:
-            self.x = random.choice([20, 50, 80])
-        list.append(self.x)
-
+        self.x = 20
 
     def draw(self):
         self.image.draw(self.x, self.y)
@@ -25,10 +17,32 @@ class Life:
     def update(self):
         pass
 
-    def remove(self):
-        game_world.remove_object(self)
-    def handle_collision(boy, enemy, group):
-        if group == 'boy:enemy':
-            Life.remove()
+
+class Life2:
+    image = None
+    def __init__(self):
+        if Life2.image == None:
+            Life2.image = load_image('heart.png')
+        self.y = 480
+        self.x = 50
+
+    def draw(self):
+        self.image.draw(self.x, self.y)
+
+    def update(self):
+        pass
 
 
+class Life3:
+    image = None
+    def __init__(self):
+        if Life3.image == None:
+            Life3.image = load_image('heart.png')
+        self.y = 480
+        self.x = 80
+
+    def draw(self):
+        self.image.draw(self.x, self.y)
+
+    def update(self):
+        pass

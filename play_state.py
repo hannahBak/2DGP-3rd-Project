@@ -8,7 +8,7 @@ from boy import Boy
 from enemy import Enemy
 from enemy import Angry
 from bath import Bath
-from ui import Life
+from ui import Life1, Life2, Life3
 from coin import Coin
 
 boy = None
@@ -43,7 +43,7 @@ def enter():
     game_world.add_object(coin, 1)
 
     global lifes
-    lifes = [Life() for i in range(3)]
+    lifes = [Life3(), Life2(), Life1()]
     game_world.add_objects(lifes, 1)
 
 
@@ -64,19 +64,21 @@ def update():
     for game_object in game_world.all_objects():
         game_object.update()
 
-    for enemy in enemys.copy():
-        for life in lifes.copy():
+    for life in lifes:
+        for enemy in enemys.copy():
             if collide(boy, enemy):
+                enemys.remove(enemy)
+                game_world.remove_object(enemy)
                 lifes.remove(life)
                 game_world.remove_object(life)
 
+    
 
     for a, b, group in game_world.all_collision_pairs():
         if collide(a, b):
             print('COLLISION ', group)
             a.handle_collision(b, group)
             b.handle_collision(a, group)
-            
 
 
 def draw_world():

@@ -3,8 +3,6 @@ import random
 import game_framework
 import game_world
 
-from ui import Life
-
 PIXEL_PER_METER = (10.0 / 0.3)
 RUN_SPEED_KPH = 40.0  # 마라토너의 평속
 RUN_SPEED_MPM = (RUN_SPEED_KPH * 1000.0 / 60.0)
