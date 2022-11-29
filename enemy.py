@@ -17,7 +17,7 @@ class Enemy:
 
     def __init__(self):
         if Enemy.image == None:
-            Enemy.image = load_image('smile_poop.png')
+            Enemy.image = load_image('resource\\smile_poop.png')
         self.y = 540
         self.x = random.randint(0, 720)
         self.dir = 1
@@ -40,12 +40,13 @@ class Enemy:
         if group == 'boy:enemy':
             print('collide enemy')
 
+
 class Angry:
     image = None
 
     def __init__(self):
         if Angry.image == None:
-            Angry.image = load_image('angry_poop.png')
+            Angry.image = load_image('resource\\angry_poop.png')
         self.y = 540
         self.x = random.randint(0, 720)
         self.dir = 1

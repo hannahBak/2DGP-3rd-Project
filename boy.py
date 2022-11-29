@@ -96,7 +96,7 @@ class Boy:
         self.x, self.y = 360, 90
         self.frame = 0
         self.dir, self.face_dir = 0, 1
-        self.character = load_image('boyCharacter.png')
+        self.character = load_image('resource\\boyCharacter.png')
 
         self.event_que = []
         self.cur_state = IDLE
@@ -115,7 +115,7 @@ class Boy:
             except KeyError:
                 print('ERROR:', self.cur_state.__name__, '  ',  event_name[event])
             self.cur_state.enter(self, event)
-        self.character = load_image('boyCharacter.png')
+        self.character = load_image('resource\\boyCharacter.png')
 
     def draw(self):
 
@@ -138,9 +138,9 @@ class Boy:
 
     def handle_collision(self, other, group):
         if group == 'boy:enemy':
-            self.character = load_image('redCharacter.png')
+            self.character = load_image('resource\\redCharacter.png')
         if group == 'boy:coin':
-            self.character = load_image('blueCharacter.png')
+            self.character = load_image('resource\\blueCharacter.png')
 
 
 

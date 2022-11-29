@@ -13,7 +13,7 @@ from coin import Coin
 
 boy = None
 bath = None
-coin = None
+coins = []
 lifes = []
 enemys = []
 angrys = []
@@ -32,15 +32,15 @@ def handle_events():
 
 # 초기화
 def enter():
-    global boy, bath, coin, angrys
+    global boy, bath, coins, angrys
     bath = Bath()
     game_world.add_object(bath, 0)
 
     boy = Boy()
     game_world.add_object(boy, 1)
 
-    coin = Coin()
-    game_world.add_object(coin, 1)
+    coins = [Coin() for i in range(1)]
+    game_world.add_objects(coins, 1)
 
     global lifes
     lifes = [Life3(), Life2(), Life1()]
@@ -48,12 +48,15 @@ def enter():
 
 
     global enemys
-    enemys = [Enemy() for i in range(2)] + [Angry() for i in range(1)]
+    enemys = [Enemy() for i in range(2)]
     game_world.add_objects(enemys, 1)
 
+    angrys = [Angry() for i in range(1)]
+    game_world.add_objects(angrys, 1)
+
     game_world.add_collision_group(boy, enemys, 'boy:enemy')
-    game_world.add_collision_group(boy, coin, 'boy:coin')
-    game_world.add_collision_group(boy, coin, 'boy:angry')
+    game_world.add_collision_group(boy, coins, 'boy:coin')
+    game_world.add_collision_group(boy, angrys, 'boy:angry')
 
 
 # 종료
@@ -65,14 +68,22 @@ def update():
         game_object.update()
 
     for life in lifes:
-        for enemy in enemys.copy():
+        for enemy in enemys:
             if collide(boy, enemy):
                 enemys.remove(enemy)
-                game_world.remove_object(enemy)
                 lifes.remove(life)
+                game_world.remove_object(enemy)
                 game_world.remove_object(life)
+                enemys.append(Enemy())
+                game_world.add_objects(enemys, 1)
 
-    
+    for coin in coins:
+        if collide(boy, coin):
+            coins.remove(coin)
+            game_world.remove_object(coin)
+            coins.append(Coin())
+            game_world.add_objects(coins, 1)
+            Coin.score += 1
 
     for a, b, group in game_world.all_collision_pairs():
         if collide(a, b):

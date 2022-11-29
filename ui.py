@@ -7,7 +7,7 @@ class Life1:
     image = None
     def __init__(self):
         if Life1.image == None:
-            Life1.image = load_image('heart.png')
+            Life1.image = load_image('resource\\heart.png')
         self.y = 480
         self.x = 20
 
@@ -22,7 +22,7 @@ class Life2:
     image = None
     def __init__(self):
         if Life2.image == None:
-            Life2.image = load_image('heart.png')
+            Life2.image = load_image('resource\\heart.png')
         self.y = 480
         self.x = 50
 
@@ -37,7 +37,7 @@ class Life3:
     image = None
     def __init__(self):
         if Life3.image == None:
-            Life3.image = load_image('heart.png')
+            Life3.image = load_image('resource\\heart.png')
         self.y = 480
         self.x = 80
 
