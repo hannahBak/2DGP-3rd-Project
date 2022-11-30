@@ -13,9 +13,21 @@ TIME_PER_ACTION = 0.5
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_ACTION = 8
 
+class Score:
+    score = 0
+    def __init__(self):
+        self.font = load_font('resource\\\ENCR10B.TTF', 20)
+
+    def draw(self):
+        self.font.draw(20, 520, f'(Score: {Score.score})', (0, 0, 0))
+        pass
+
+    def update(self):
+        pass
+
+
 class Coin:
     image = None
-    score = 0
 
     def __init__(self):
         if Coin.image == None:
@@ -23,11 +35,9 @@ class Coin:
         self.y = 540
         self.x = random.randint(0, 720)
         self.dir = 1
-        self.font = load_font('resource\\\ENCR10B.TTF', 16)
 
     def draw(self):
         self.image.draw(self.x, self.y)
-        self.font.draw(20, 520, f'(Score: {Coin.score})', (0, 0, 0))
         draw_rectangle(*self.get_bb())
 
     def update(self):
@@ -37,14 +47,13 @@ class Coin:
             self.y = 540
             self.x = random.randint(0, 720)
 
-
     def get_bb(self):
         return self.x - 30, self.y - 30, self.x + 30, self.y + 30
 
-
-
     def handle_collision(self, other, group):
-        pass
-
+        if group == 'boy:coin':
+            print('collide coin')
+            game_world.remove_object(self)
+            Score.score += 1
 
 

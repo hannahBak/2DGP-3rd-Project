@@ -1,6 +1,7 @@
 from pico2d import *
 import game_framework
 import game_world
+import game_over_state
 import threading
 import time
 
@@ -9,7 +10,7 @@ from enemy import Enemy
 from enemy import Angry
 from bath import Bath
 from ui import Life1, Life2, Life3
-from coin import Coin
+from coin import Coin, Score
 
 boy = None
 bath = None
@@ -32,12 +33,15 @@ def handle_events():
 
 # 초기화
 def enter():
-    global boy, bath, coins, angrys
+    global boy, bath, coins, angrys, score
     bath = Bath()
     game_world.add_object(bath, 0)
 
     boy = Boy()
     game_world.add_object(boy, 1)
+
+    score = Score()
+    game_world.add_object(score, 1)
 
     coins = [Coin() for i in range(1)]
     game_world.add_objects(coins, 1)
@@ -48,7 +52,7 @@ def enter():
 
 
     global enemys
-    enemys = [Enemy() for i in range(2)]
+    enemys = [Enemy() for i in range(1)]
     game_world.add_objects(enemys, 1)
 
     angrys = [Angry() for i in range(1)]
@@ -71,11 +75,21 @@ def update():
         for enemy in enemys:
             if collide(boy, enemy):
                 enemys.remove(enemy)
-                lifes.remove(life)
                 game_world.remove_object(enemy)
-                game_world.remove_object(life)
                 enemys.append(Enemy())
                 game_world.add_objects(enemys, 1)
+                lifes.remove(life)
+                game_world.remove_object(life)
+
+    for life in lifes:
+        for angry in angrys:
+            if collide(boy, angry):
+                angrys.remove(angry)
+                game_world.remove_object(angry)
+                angrys.append(Angry())
+                game_world.add_objects(angrys, 1)
+                lifes.remove(life)
+                game_world.remove_object(life)
 
     for coin in coins:
         if collide(boy, coin):
@@ -83,7 +97,10 @@ def update():
             game_world.remove_object(coin)
             coins.append(Coin())
             game_world.add_objects(coins, 1)
-            Coin.score += 1
+            Score.score += 1
+
+    if len(lifes) < 1:
+        game_framework.change_state(game_over_state)
 
     for a, b, group in game_world.all_collision_pairs():
         if collide(a, b):
@@ -95,6 +112,7 @@ def update():
 def draw_world():
     for game_object in game_world.all_objects():
         game_object.draw()
+
 
 def draw():
     clear_canvas()
