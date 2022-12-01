@@ -6,7 +6,7 @@ image = None
 
 def enter():
     global image
-    image = load_image('resource\\game_over.png')
+    image = load_image('resource\\gameover.png')
 
 def exit():
     global image
@@ -25,7 +25,8 @@ def handle_events():
         elif event.type == SDL_KEYDOWN:
             match event.key:
                 case pico2d.SDLK_ESCAPE:
-                    game_framework.pop_state()
+                    game_framework.quit()
+
 
 def update():
     pass

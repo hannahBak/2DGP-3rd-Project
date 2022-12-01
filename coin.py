@@ -50,10 +50,6 @@ class Coin:
     def get_bb(self):
         return self.x - 30, self.y - 30, self.x + 30, self.y + 30
 
-    def handle_collision(self, other, group):
-        if group == 'boy:coin':
-            print('collide coin')
-            game_world.remove_object(self)
-            Score.score += 1
+
 
 
