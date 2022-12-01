@@ -81,15 +81,12 @@ def update():
                 lifes.remove(life)
                 game_world.remove_object(life)
 
-    for life in lifes:
-        for angry in angrys:
-            if collide(boy, angry):
-                angrys.remove(angry)
-                game_world.remove_object(angry)
-                angrys.append(Angry())
-                game_world.add_objects(angrys, 1)
-                lifes.remove(life)
-                game_world.remove_object(life)
+
+    for angry in angrys:
+        if collide(boy, angry):
+            angrys.remove(angry)
+            game_world.remove_object(angry)
+            game_framework.change_state(game_over_state)
 
     for coin in coins:
         if collide(boy, coin):
