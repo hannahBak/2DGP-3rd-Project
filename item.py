@@ -36,3 +36,12 @@ class Item:
 
     def get_bb(self):
         return self.x - 30, self.y - 30, self.x + 30, self.y + 30
+
+    def get_cc(self):
+        return self.x - 70, self.y - 70, self.x + 70, self.y + 70
+
+    def handle_collision(self, other, group):
+        if group == 'boy:item':
+            print('collide item')
+            game_world.remove_object(self)
+

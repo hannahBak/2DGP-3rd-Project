@@ -28,6 +28,7 @@ class Score:
 
 class Coin:
     image = None
+    eat_sound = None
 
     def __init__(self):
         if Coin.image == None:
@@ -35,6 +36,9 @@ class Coin:
         self.y = 540
         self.x = random.randint(0, 720)
         self.dir = 1
+        if Coin.eat_sound is None:
+            Coin.eat_sound = load_wav('resource\\coinsound.wav')
+        Coin.eat_sound.set_volume(32)
 
     def draw(self):
         self.image.draw(self.x, self.y)
@@ -50,6 +54,12 @@ class Coin:
     def get_bb(self):
         return self.x - 30, self.y - 30, self.x + 30, self.y + 30
 
+    def handle_collision(self, other, group):
+        Coin.eat_sound.play()
 
+        # if group == 'boy:coin':
+        #     print('collide coin')
+        #     game_world.remove_object(self)
+        #     Score.score += 1
 
 
