@@ -1,6 +1,7 @@
 import game_framework
 from pico2d import *
 import play_state
+from coin import Score
 
 image = None
 
@@ -29,4 +30,5 @@ def draw():
     update_canvas()
 
 def update():
+    Score.score = 0
     pass
