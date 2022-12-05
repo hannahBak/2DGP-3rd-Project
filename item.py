@@ -2,6 +2,7 @@ from pico2d import *
 import random
 import game_framework
 import game_world
+import time
 
 PIXEL_PER_METER = (10.0 / 0.3)
 RUN_SPEED_KPH = 40.0  # 마라토너의 평속
@@ -28,6 +29,7 @@ class Item:
         draw_rectangle(*self.get_bb())
 
     def update(self):
+        Item.image = load_image('resource\\bomb.png')
         self.y -= self.dir * RUN_SPEED_PPS * game_framework.frame_time
         self.dir += 0.0001
         if self.y < 0:
@@ -37,11 +39,10 @@ class Item:
     def get_bb(self):
         return self.x - 30, self.y - 30, self.x + 30, self.y + 30
 
-    def get_cc(self):
-        return self.x - 70, self.y - 70, self.x + 70, self.y + 70
-
     def handle_collision(self, other, group):
         if group == 'boy:item':
             print('collide item')
-            game_world.remove_object(self)
+            Item.image = load_image('resource\\coin.png')
+
+
 

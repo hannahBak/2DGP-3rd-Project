@@ -2,7 +2,7 @@ from pico2d import *
 import game_framework
 import game_world
 import game_over_state
-import threading
+import pause_state
 import time
 
 from boy import Boy
@@ -11,13 +11,16 @@ from enemy import Angry
 from bath import Bath
 from ui import Life1, Life2, Life3
 from coin import Coin, Score
+from item import Item
 
 boy = None
 bath = None
+items = []
 coins = []
 lifes = []
 enemys = []
 angrys = []
+item_type = None
 
 
 def handle_events():
@@ -26,14 +29,16 @@ def handle_events():
         if event.type == SDL_QUIT:
             game_framework.quit()
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_ESCAPE):
-            game_framework.quit()
+            game_framework.push_state(pause_state)
+        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_e):
+            item_play()
         else:
             boy.handle_event(event)
 
 
 # 초기화
 def enter():
-    global boy, bath, coins, angrys, score
+    global boy, bath, coins, angrys, score, items
     bath = Bath()
     game_world.add_object(bath, 0)
 
@@ -46,13 +51,16 @@ def enter():
     coins = [Coin() for i in range(1)]
     game_world.add_objects(coins, 1)
 
+    items = [Item() for i in range(1)]
+    game_world.add_objects(items, 1)
+
     global lifes
     lifes = [Life3(), Life2(), Life1()]
     game_world.add_objects(lifes, 1)
 
 
     global enemys
-    enemys = [Enemy() for i in range(1)]
+    enemys = [Enemy()]
     game_world.add_objects(enemys, 1)
 
     angrys = [Angry() for i in range(1)]
@@ -61,6 +69,7 @@ def enter():
     game_world.add_collision_group(boy, enemys, 'boy:enemy')
     game_world.add_collision_group(boy, coins, 'boy:coin')
     game_world.add_collision_group(boy, angrys, 'boy:angry')
+    game_world.add_collision_group(boy, items, 'boy:item')
 
 
 # 종료
@@ -71,6 +80,19 @@ def update():
     for game_object in game_world.all_objects():
         game_object.update()
 
+    # for item in items:
+    #     if collide(boy, item):
+    #         items.remove(item)
+    #         game_world.remove_object(item)
+    #         items.append(Item())
+    #         game_world.add_objects(items, 1)
+    #         if len(lifes) < 2:
+    #             lifes.append(Life2())
+    #             game_world.add_objects(lifes, 1)
+    #         elif len(lifes) < 3:
+    #             lifes.append(Life3())
+    #             game_world.add_objects(lifes, 1)
+
     for life in lifes:
         for enemy in enemys:
             if collide(boy, enemy):
@@ -78,9 +100,15 @@ def update():
                 game_world.remove_object(enemy)
                 enemys.append(Enemy())
                 game_world.add_objects(enemys, 1)
-                lifes.remove(life)
-                game_world.remove_object(life)
-
+                if len(lifes) == 3:
+                    lifes.remove(life)
+                    game_world.remove_object(life)
+                elif len(lifes) == 2:
+                    lifes.remove(life)
+                    game_world.remove_object(life)
+                elif len(lifes) == 1:
+                    lifes.remove(life)
+                    game_world.remove_object(life)
 
     for angry in angrys:
         if collide(boy, angry):
@@ -88,16 +116,27 @@ def update():
             game_world.remove_object(angry)
             game_framework.change_state(game_over_state)
 
+    for item in items:
+        if collide(boy, item):
+            global item_type
+            items.remove(item)
+            game_world.remove_object(item)
+            item_type = 'bomb'
+
+
     for coin in coins:
         if collide(boy, coin):
             coins.remove(coin)
             game_world.remove_object(coin)
             coins.append(Coin())
+            Coin.eat_sound.play()
             game_world.add_objects(coins, 1)
             Score.score += 1
 
     if len(lifes) < 1:
         game_framework.change_state(game_over_state)
+
+
 
     for a, b, group in game_world.all_collision_pairs():
         if collide(a, b):
@@ -134,7 +173,21 @@ def collide(a, b):
 
     return True
 
+def item_play():
+    if item_type == 'bomb':
+        for angry in angrys:
+            angrys.remove(angry)
+            game_world.remove_object(angry)
+            angrys.append(Angry())
+            game_world.add_objects(angrys, 1)
 
+        for enemy in enemys:
+            enemys.remove(enemy)
+            game_world.remove_object(enemy)
+            enemys.append(Enemy())
+            game_world.add_objects(enemys, 1)
+
+    pass
 def test_self():
     import play_state
     pico2d.open_canvas()

@@ -1,8 +1,10 @@
 import game_framework
 from pico2d import *
-import play_state
+import title
+import time
 
 image = None
+current_time = time.time()
 
 def enter():
     global image
@@ -29,4 +31,7 @@ def handle_events():
 
 
 def update():
+    logo_time = time.time() - current_time
+    if logo_time > 5.0:
+        game_framework.change_state(title)
     pass
