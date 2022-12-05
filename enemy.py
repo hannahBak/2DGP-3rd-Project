@@ -28,7 +28,7 @@ class Enemy:
 
     def update(self):
         self.y -= self.dir * RUN_SPEED_PPS * game_framework.frame_time
-        self.dir += 0.0001
+        self.dir += 0.0003
         if self.y < 0:
             self.y = 540
             self.x = random.randint(0, 720)
