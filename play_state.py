@@ -12,7 +12,7 @@ from bath import Bath
 from ui import Life1, Life2, Life3
 from coin import Coin, Score
 from item import Item
-from item_place import bomb_place
+from item_place import bomb_place, Boom
 
 boy = None
 bath = None
@@ -142,6 +142,8 @@ def update():
     if len(lifes) < 1:
         game_framework.change_state(game_over_state)
 
+    # if item_type == None:
+    #     boom = None
 
     for a, b, group in game_world.all_collision_pairs():
         if collide(a, b):
@@ -179,6 +181,8 @@ def collide(a, b):
     return True
 
 def item_play():
+    current_time = time.time()
+
     if item_type == 'bomb':
         for angry in angrys:
             angrys.remove(angry)
@@ -192,12 +196,19 @@ def item_play():
             enemys.append(Enemy())
             game_world.add_objects(enemys, 1)
 
-    boom = load_image('resource\\boom.png')
-    boom.draw(300, 300)
+    # now_time = time.time() - current_time
+    # boom = Boom()
+    # game_world.add_object(boom, 1)
 
-    for bomb in bombs:
-        bombs.remove(bomb)
-        game_world.remove_object(bomb)
+    # if now_time > 1.0:
+    #     del boom[0]
+
+    # boom = load_image('resource\\boom.png')
+    # boom.draw(300, 300)
+
+    # for bomb in bombs:
+    #     bombs.remove(bomb)
+    #     game_world.remove_object(bomb)
 
 def test_self():
     import play_state

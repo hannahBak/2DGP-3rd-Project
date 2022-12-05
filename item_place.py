@@ -13,3 +13,17 @@ class bomb_place:
 
     def update(self):
         pass
+
+class Boom:
+    image = None
+    def __init__(self):
+        if Boom.image == None:
+            Boom.image = load_image('resource\\boomm.png')
+        self.y = 270
+        self.x = 360
+
+    def draw(self):
+        self.image.draw(self.x, self.y)
+
+    def update(self):
+        pass
