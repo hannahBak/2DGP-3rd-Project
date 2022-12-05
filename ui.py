@@ -1,7 +1,4 @@
 from pico2d import *
-import random
-import game_world
-import game_framework
 
 class Life1:
     image = None

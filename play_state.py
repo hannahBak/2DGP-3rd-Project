@@ -12,6 +12,7 @@ from bath import Bath
 from ui import Life1, Life2, Life3
 from coin import Coin, Score
 from item import Item
+from item_place import bomb_place
 
 boy = None
 bath = None
@@ -21,9 +22,11 @@ lifes = []
 enemys = []
 angrys = []
 item_type = None
+bombs = []
 
 
 def handle_events():
+    global item_type
     events = get_events()
     for event in events:
         if event.type == SDL_QUIT:
@@ -32,6 +35,7 @@ def handle_events():
             game_framework.push_state(pause_state)
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_e):
             item_play()
+            item_type = None
         else:
             boy.handle_event(event)
 
@@ -96,6 +100,7 @@ def update():
     for life in lifes:
         for enemy in enemys:
             if collide(boy, enemy):
+                Enemy.eat_sound.play()
                 enemys.remove(enemy)
                 game_world.remove_object(enemy)
                 enemys.append(Enemy())
@@ -122,7 +127,8 @@ def update():
             items.remove(item)
             game_world.remove_object(item)
             item_type = 'bomb'
-
+            bombs = [bomb_place()]
+            game_world.add_objects(bombs, 1)
 
     for coin in coins:
         if collide(boy, coin):
@@ -135,7 +141,6 @@ def update():
 
     if len(lifes) < 1:
         game_framework.change_state(game_over_state)
-
 
 
     for a, b, group in game_world.all_collision_pairs():
@@ -187,7 +192,13 @@ def item_play():
             enemys.append(Enemy())
             game_world.add_objects(enemys, 1)
 
-    pass
+    boom = load_image('resource\\boom.png')
+    boom.draw(300, 300)
+
+    for bomb in bombs:
+        bombs.remove(bomb)
+        game_world.remove_object(bomb)
+
 def test_self():
     import play_state
     pico2d.open_canvas()

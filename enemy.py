@@ -14,13 +14,16 @@ ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAMES_PER_ACTION = 8
 class Enemy:
     image = None
-
+    eat_sound = None
     def __init__(self):
         if Enemy.image == None:
             Enemy.image = load_image('resource\\smile_poop.png')
         self.y = 540
         self.x = random.randint(0, 720)
         self.dir = 1
+        if Enemy.eat_sound is None:
+            Enemy.eat_sound = load_wav('resource\\poopsound.wav')
+        Enemy.eat_sound.set_volume(32)
 
     def draw(self):
         self.image.draw(self.x, self.y)
